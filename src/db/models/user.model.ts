@@ -9,11 +9,12 @@ import {
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: number;
-  declare firstName: string;
+  declare first_name: string;
   declare password: string;
   declare email: string;
   declare createdAt: Date;
   declare updatedAt: Date;
+  declare deletedAt?: Date;
 }
 
 // this configures the `userId` attribute.
@@ -26,7 +27,7 @@ User.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    firstName: {
+    first_name: {
       allowNull: false,
       type: DataTypes.TEXT,
     },
@@ -40,6 +41,10 @@ User.init(
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     sequelize,
@@ -48,5 +53,8 @@ User.init(
     underscored: true,
     timestamps: true,
     paranoid: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+    deletedAt: "deleted_at",
   }
 );

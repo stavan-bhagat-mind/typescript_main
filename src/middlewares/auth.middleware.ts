@@ -1,6 +1,16 @@
 import { Request, Response, NextFunction } from "express";
-require("dotenv").config;
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: string;
+    }
+  }
+}
 
 const authenticationMiddleware = (
   req: Request,
@@ -16,19 +26,22 @@ const authenticationMiddleware = (
         message: "Authentication token not provided",
       });
     }
+
     const token = authenticationToken.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    const decoded = jwt.verify(token, process.env.JWT_KEY as string) as {
+      id: string;
+    };
     req.userId = decoded.id;
     next();
   } catch (error) {
-    if (error.name === "TokenExpiredError") {
+    if (error instanceof jwt.TokenExpiredError) {
       return res.status(401).json({
         success: false,
         data: null,
         message: "Token has expired",
         errorName: error.name,
       });
-    } else if (error.name === "JsonWebTokenError") {
+    } else if (error instanceof jwt.JsonWebTokenError) {
       return res.status(403).json({
         success: false,
         data: null,
@@ -45,4 +58,4 @@ const authenticationMiddleware = (
   }
 };
 
-module.exports = authenticationMiddleware;
+export default authenticationMiddleware;

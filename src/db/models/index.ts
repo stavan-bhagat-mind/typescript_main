@@ -8,6 +8,8 @@ import process from "process";
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
 const config = require(path.join(__dirname, "../config/config"))[env];
+console.log("Config:", config);
+
 interface CustomModel extends Model {
   associate?: (db: Record<string, CustomModel>) => void;
 }
@@ -33,6 +35,28 @@ if (config.use_env_variable) {
     config
   );
 }
+
+// =====  CONNECTION TEST =====
+async function testConnection() {
+  try {
+    await sequelize.authenticate();
+    console.log("✅ Database connection established");
+    console.log("📊 Database:", config.database);
+    console.log("🖥️  Host:", config.host || "localhost");
+  } catch (error) {
+    console.error("❌ Database connection failed:");
+    if (error instanceof Error) {
+      console.error("Error details:", (error as any).original || error.message);
+    } else {
+      console.error("Error details:", error);
+    }
+    process.exit(1);
+  }
+}
+(async () => {
+  await testConnection();
+})();
+// ===== END CONNECTION TEST =====
 
 fs.readdirSync(__dirname)
   .filter((file) => {
