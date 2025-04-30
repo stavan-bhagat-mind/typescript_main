@@ -47,9 +47,11 @@ export const MESSAGES = {
   MSG_ACCESS_TOKEN_REFRESHED: "Access token refreshed successfully.",
   MSG_REFRESH_TOKEN_EXPIRED: "Refresh token has expired.",
   MSG_INVALID_REFRESH_TOKEN: "Invalid refresh token.",
+  MSG_INVALID_CREDENTIALS: "Invalid credentials.",
   MSG_LINK_EXPIRE:
     "The verification link has expired. Please request a new verification link.",
   TOO_MANY_ATTEMPTS: "Too many attempts",
+  MSG_USER_LOGGED_IN_SUCCESS: "User logged in successfully.",
 
   // email-Messages
   MSG_VERIFY_EMAIL: "Please verify your email address.",

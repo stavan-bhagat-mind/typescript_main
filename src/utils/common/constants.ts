@@ -1,9 +1,6 @@
-export const ROLE = ["attendee", "event_manager"];
+export const ROLE = ["user", "admin"];
 export const SERVICE_NAME = "gmail";
-export const APP = {
-  NAME: "EventifY",
-  DESCRIPTION: "Event Management System",
-};
+export const LOGIN_TYPE = ["google", "email"];
 export const CATEGORY = {
   USER: "User",
   EVENT: "Event",

@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { CODE, STATUS_SUCCESS, STATUS_BAD_REQUEST } from "./common/constants";
+import { CODE, STATUS_CODE } from "./common/constants";
 
 interface MetaData {
   code: number;
@@ -117,7 +117,7 @@ export const validationErrorResponseData = (
     });
   }
 
-  return res.status(STATUS_BAD_REQUEST).json(response);
+  return res.status(STATUS_CODE.STATUS_BAD_REQUEST).json(response);
 };
 
 // Commented out functions in the original code

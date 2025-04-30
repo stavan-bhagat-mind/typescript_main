@@ -17,7 +17,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/", IndexRoute);
+app.use("/typescript", IndexRoute);
 
 app.listen(port, () => {
   console.log("Server started on port ", port);

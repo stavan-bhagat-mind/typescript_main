@@ -8,6 +8,7 @@
     "start": "nodemon ./dist/index.js",
     "db:migrate:generate": "sequelize migration:generate --name",
     "ddb:migrate:generate": "sequelize migration:generate --name user --migrations-path src/db/migration",
+    "db:migrate:status": "sequelize-cli db:migrate:status",
     "db:migrate": "sequelize-cli db:migrate",
     "db:migrate:undo": "sequelize-cli db:migrate:undo",
     "db:migrate:undo:all": "sequelize-cli db:migrate:undo:all",

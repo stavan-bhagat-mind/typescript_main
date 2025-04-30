@@ -16,40 +16,44 @@ const authenticationMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): void => {
   try {
     const authenticationToken = req.headers["authorization"];
     if (!authenticationToken) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         data: null,
         message: "Authentication token not provided",
       });
+      return;
     }
 
     const token = authenticationToken.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_KEY as string) as {
-      id: string;
-    };
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_KEY is not configured");
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET) as { id: string };
     req.userId = decoded.id;
     next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         data: null,
         message: "Token has expired",
         errorName: error.name,
       });
     } else if (error instanceof jwt.JsonWebTokenError) {
-      return res.status(403).json({
+      res.status(403).json({
         success: false,
         data: null,
         message: "Invalid authentication token",
         errorName: error.name,
       });
     } else {
-      return res.status(500).json({
+      console.error("Authentication error:", error);
+      res.status(500).json({
         success: false,
         data: null,
         message: "Internal server error",
