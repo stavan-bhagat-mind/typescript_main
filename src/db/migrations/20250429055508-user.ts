@@ -4,21 +4,13 @@ import { ROLE, LOGIN_TYPE } from "../../utils/common/constants";
 
 module.exports = {
   async up(queryInterface: QueryInterface, Sequelize: typeof DataTypes) {
-    await queryInterface.sequelize.query(`
-      CREATE TYPE "enum_users_login_type" AS ENUM (${LOGIN_TYPE.map(
-        (t) => `'${t}'`
-      ).join(",")});
-      CREATE TYPE "enum_users_user_type" AS ENUM (${ROLE.map(
-        (r) => `'${r}'`
-      ).join(",")});
-    `);
-
     await queryInterface.createTable("users", {
       id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
         allowNull: false,
+        primaryKey: true,
+        type: Sequelize.UUID,
+        unique: true,
+        defaultValue: Sequelize.UUIDV4,
       },
       first_name: {
         type: Sequelize.STRING,
@@ -34,7 +26,8 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: null,
       },
       user_type: {
         type: Sequelize.ENUM(...ROLE),
@@ -43,22 +36,31 @@ module.exports = {
       google_id: {
         type: Sequelize.STRING,
         allowNull: true,
+        defaultValue: null,
       },
-      login_type: {
-        type: Sequelize.ENUM(...LOGIN_TYPE),
+      github_id: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
+      auth_method: {
+        type: Sequelize.ENUM(...Object.values(LOGIN_TYPE)),
         allowNull: false,
       },
       profile_url: {
         type: Sequelize.STRING,
         allowNull: true,
+        defaultValue: null,
       },
       password_reset_token: {
         type: Sequelize.STRING,
         allowNull: true,
+        defaultValue: null,
       },
       password_reset_token_expiry: {
         type: Sequelize.DATE,
         allowNull: true,
+        defaultValue: null,
       },
       contact_number: {
         type: Sequelize.STRING,
@@ -67,6 +69,7 @@ module.exports = {
           isNumeric: true,
           len: [10, 15],
         },
+        defaultValue: null,
       },
       created_at: {
         allowNull: false,
@@ -84,5 +87,11 @@ module.exports = {
   },
   async down(queryInterface: QueryInterface, Sequelize: any) {
     await queryInterface.dropTable("users");
+    await queryInterface.sequelize.query(
+      'DROP TYPE IF EXISTS "enum_users_auth_method";'
+    );
+    await queryInterface.sequelize.query(
+      'DROP TYPE IF EXISTS "enum_users_user_type";'
+    );
   },
 };

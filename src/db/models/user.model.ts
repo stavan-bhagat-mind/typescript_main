@@ -16,7 +16,8 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare email: string;
   declare user_type: string;
   declare google_id?: string;
-  declare login_type: string;
+  declare github_id?: string;
+  declare auth_method: string;
   declare profile_url?: string;
   declare password_reset_token?: string;
   declare password_reset_token_expiry?: Date;
@@ -32,30 +33,32 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   }
 }
 
-// Export a function that initializes the model
 export default (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
   User.init(
     {
       id: {
-        type: dataTypes.INTEGER,
+        allowNull: false,
         primaryKey: true,
-        autoIncrement: true,
+        type: DataTypes.UUID,
+        unique: true,
+        defaultValue: DataTypes.UUIDV4,
       },
       first_name: {
         allowNull: false,
-        type: dataTypes.TEXT,
+        type: dataTypes.STRING,
       },
       last_name: {
         allowNull: false,
-        type: dataTypes.TEXT,
+        type: dataTypes.STRING,
       },
       password: {
-        allowNull: false,
+        allowNull: true,
+        defaultValue: null,
         type: dataTypes.TEXT,
       },
       email: {
         allowNull: false,
-        type: dataTypes.TEXT,
+        type: dataTypes.STRING,
       },
       user_type: {
         type: dataTypes.ENUM(...ROLE),
@@ -64,22 +67,31 @@ export default (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
       google_id: {
         type: dataTypes.STRING,
         allowNull: true,
+        defaultValue: null,
       },
-      login_type: {
-        type: dataTypes.ENUM(...LOGIN_TYPE),
+      github_id: {
+        type: dataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
+      auth_method: {
+        type: dataTypes.ENUM(...Object.values(LOGIN_TYPE)),
         allowNull: false,
       },
       profile_url: {
         type: dataTypes.STRING,
         allowNull: true,
+        defaultValue: null,
       },
       password_reset_token: {
         type: dataTypes.STRING,
         allowNull: true,
+        defaultValue: null,
       },
       password_reset_token_expiry: {
         type: dataTypes.DATE,
         allowNull: true,
+        defaultValue: null,
       },
       contact_number: {
         type: dataTypes.STRING,
@@ -88,6 +100,7 @@ export default (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
           isNumeric: true,
           len: [10, 15],
         },
+        defaultValue: null,
       },
       createdAt: dataTypes.DATE,
       updatedAt: dataTypes.DATE,

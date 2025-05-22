@@ -52,7 +52,10 @@ export const MESSAGES = {
     "The verification link has expired. Please request a new verification link.",
   TOO_MANY_ATTEMPTS: "Too many attempts",
   MSG_USER_LOGGED_IN_SUCCESS: "User logged in successfully.",
-
+  MSG_ACCOUNT_ASSOCIATED_WITH_GOOGLE:
+    "This account is associated with Google SSO. Please use Google login.",
+  MSG_ACCOUNT_ASSOCIATED_WITH_EMAIL:
+    "This email is registered with email/password. Please use email login or link your Google account.",
   // email-Messages
   MSG_VERIFY_EMAIL: "Please verify your email address.",
   MSG_RESET_PASSWORD_EMAIL_SENT: "Reset password email sent successfully.",

@@ -1,6 +1,10 @@
 export const ROLE = ["user", "admin"];
 export const SERVICE_NAME = "gmail";
-export const LOGIN_TYPE = ["google", "email"];
+export const LOGIN_TYPE = {
+  GOOGLE: "google",
+  EMAIL: "email",
+  GITHUB: "github",
+};
 export const CATEGORY = {
   USER: "User",
   EVENT: "Event",
